@@ -1,13 +1,111 @@
+/* Global styling */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Main container for the chart and controls */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
     text-align: center;
-  }
-  
-  svg {
-    border: 1px solid black;
-  }
-  
-  .line {
-    transition: stroke-width 0.2s;
-  }
-  
+}
+
+/* Title styling */
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+/* Controls for filtering */
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.controls label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.controls input, .controls button {
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-right: 15px;
+}
+
+.controls button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.controls button:hover {
+    background-color: #0056b3;
+}
+
+/* Chart container */
+.chart-container {
+    margin-top: 20px;
+    position: relative;
+    overflow: visible;
+    max-width: 100%;
+}
+
+
+
+/* Styling for the bars */
+.bar {
+    fill: steelblue;
+    transition: width 0.8s, y 0.8s;
+}
+
+.bar text {
+    fill: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Hover effect for the bars */
+.bar:hover {
+    fill: #ff6b6b;
+    cursor: pointer;
+}
+
+.play-bar-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Ensure it doesn't interfere with SVG */
+}
+
+.play-bar-container input[type="range"] {
+    width: 80%;
+}
+
+
+text {
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+}
+

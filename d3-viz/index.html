@@ -1,32 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Climber Elo Ratings Visualization</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climber Elo Ratings - Bar Chart Race</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-  <h1>Climber Elo Ratings Over Time</h1>
+    <div class="container">
+        <h1>Climber Elo Ratings Bar Chart Race</h1>
 
-  <!-- Filters -->
-  <label for="discipline">Discipline:</label>
-  <select id="discipline">
-    <option value="boulder">Boulder</option>
-    <option value="lead">Lead</option>
-    <option value="speed">Speed</option>
-  </select>
+        <!-- Filters: Start Date, End Date, Top N Athletes, Gender, Discipline -->
+        <div class="controls">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" value="2024-01-01">
+            
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" value="2024-05-31">
 
-  <label for="gender">Gender:</label>
-  <select id="gender">
-    <option value="male">Male</option>
-    <option value="female">Female</option>
-  </select>
+            <label for="topN">Top N Athletes:</label>
+            <input type="number" id="topN" value="10" min="1" max="100">
 
-  <!-- SVG container for the visualization -->
-  <svg id="eloChart" width="1000" height="600"></svg>
+            <label for="gender">Gender:</label>
+            <select id="gender">
+                <option value="all">All</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
 
-  <script src="script.js"></script>
+            <label for="discipline">Discipline:</label>
+            <select id="discipline">
+                <option value="all">All</option>
+                <option value="boulder">Boulder</option>
+                <option value="lead">Lead</option>
+                <option value="speed">Speed</option>
+            </select>
+
+            <button id="updateChart">Update</button>
+        </div>
+
+        <!-- SVG container for the bar race -->
+        <div class="chart-container">
+            <svg id="eloChart" width="1000" height="600"></svg>
+        </div>
+
+        <!-- Play bar for scrolling through time -->
+        <!-- Play bar (slider) -->
+        <div class="play-bar">
+            <input type="range" id="timeSlider" min="0" max="100" value="0" step="1">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
