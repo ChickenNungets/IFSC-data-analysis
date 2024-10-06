@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  svg {
+    border: 1px solid black;
+  }
+  
+  .line {
+    transition: stroke-width 0.2s;
+  }
+  

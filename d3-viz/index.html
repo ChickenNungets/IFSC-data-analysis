@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climber Elo Ratings Visualization</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <h1>Climber Elo Ratings Over Time</h1>
+
+  <!-- Filters -->
+  <label for="discipline">Discipline:</label>
+  <select id="discipline">
+    <option value="boulder">Boulder</option>
+    <option value="lead">Lead</option>
+    <option value="speed">Speed</option>
+  </select>
+
+  <label for="gender">Gender:</label>
+  <select id="gender">
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+
+  <!-- SVG container for the visualization -->
+  <svg id="eloChart" width="1000" height="600"></svg>
+
+  <script src="script.js"></script>
+</body>
+</html>
