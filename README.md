@@ -20,16 +20,16 @@ Once the raw data was collected, it went through a cleaning process. I utilized 
 
 # Data Analysis and Visualization
 
-The goal of this project was to create an interactive bar chart race showing the top competition climbers and how their [Elo-MMR](https://github.com/EbTech/Elo-MMR/blob/master/paper/EloMMR.pdf) ratings evolved over time. This was achieved using D3.js to create a dynamic visualization.
+The goal of this project was to create an interactive bar chart race showing the top competition climbers and how their [Elo-MMR](https://github.com/EbTech/Elo-MMR/blob/master/paper/EloMMR.pdf) ratings evolved over time. See elo.ipynb for more details on Elo-MMR implementation. I used D3.js to create a dynamic visualization.
 
 Key features:
 
-- Filtering by gender and discipline (boulder, lead, speed).
+- Filtering by gender and discipline (boulder, lead).
 - Interactive controls for selecting time ranges and the number of athletes displayed.
 - Smooth animations that dynamically update the chart as you explore the data over time.
 - Additionally, I've implemented a play/pause feature that lets users automatically scroll through the timeline, providing a hands-free experience for visualizing trends.
 
-The project is hosted using GitHub Pages for easy sharing and accessibility. You can check it out here!
+The project is hosted using GitHub Pages for easy sharing and accessibility. You can check it out [here](https://chickennungets.github.io/IFSC-data-analysis/)!
 
 # Future Work
 
