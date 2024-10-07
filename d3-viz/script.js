@@ -1,9 +1,14 @@
-d3.csv("elo_ratings_over_time.csv").then(function(data) {
+d3.csv("elo_ratings_over_time.csv", function(d) {
+  return {
+      date: new Date(d.date),  // Convert date string to Date object
+      athlete_name: d.athlete_name,  // Athlete's name
+      elo_rating: +d.elo_rating,  // Convert elo_rating to a number
+      discipline: d.discipline,  // Discipline (e.g., boulder, lead, speed)
+      gender: d.gender,  // Gender of the athlete
+      country: d.country
+  };
+}).then(function(data) {
 
-    data.forEach(d => {
-      d.date = new Date(d.date);  
-      d.elo_rating = +d.elo_rating;  
-    });
   
     window.fullEloData = data; 
     window.delay = 100;  // Default delay for transitions
