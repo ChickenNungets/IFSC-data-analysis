@@ -14,7 +14,9 @@ d3.csv("elo_ratings_over_time.csv", function(d) {
     window.delay = 100;  // Default delay for transitions
   
     // Initialize chart with default settings
-    updateChart(new Date("2024-05-31"), 20, "male", "boulder", window.delay);  // Default date, gender, discipline, top N
+    const inactive = d3.select("#includeInactiveCheckbox").node().checked;
+
+    updateChart(new Date("2024-05-31"), 20, "male", "boulder", window.delay, inactive);  // Default date, gender, discipline, top N
   
     // Add event listener to the "Update" button
     d3.select("#updateChart").on("click", function() {
@@ -22,11 +24,12 @@ d3.csv("elo_ratings_over_time.csv", function(d) {
       const topN = +d3.select("#topN").node().value;
       const gender = d3.select("#gender").node().value;
       const discipline = d3.select("#discipline").node().value;
+      const inactive = d3.select("#includeInactiveCheckbox").node().checked;
   
       updateCurrentDateDisplay(currentDate);
       const timeSlider = d3.select("#timeSlider").node();
       timeSlider.value = 0;
-      updateChart(currentDate, topN * 2, gender, discipline, window.delay);
+      updateChart(currentDate, topN * 2, gender, discipline, window.delay, inactive);
     });
   
     // Initialize the play bar (slider)
@@ -38,34 +41,55 @@ d3.csv("elo_ratings_over_time.csv", function(d) {
       const topN = +d3.select("#topN").node().value;
       const gender = d3.select("#gender").node().value;
       const discipline = d3.select("#discipline").node().value;
-  
+      const inactive = d3.select("#includeInactiveCheckbox").node().checked;
+
       updateCurrentDateDisplay(date);
-      updateChart(date, topN * 2, gender, discipline, delay);
+      updateChart(date, topN * 2, gender, discipline, delay, inactive);
     });
   });
   
-  // Function to get the most recent Elo ratings up to a specific date
-  function getTopAthletesUpToDate(data, currentDate, topN, gender, discipline) {
-    // Filter for the gender and discipline
-    let filteredData = data.filter(d => {
-      return d.date <= currentDate &&  
-             (d.gender === gender) &&  
-             (d.discipline === discipline); 
-    });
-  
-    
-    const mostRecentElo = {};
-    filteredData.forEach(d => {
-      if (!mostRecentElo[d.athlete_name] || d.date > mostRecentElo[d.athlete_name].date) {
-        mostRecentElo[d.athlete_name] = d;
-      }
-    });
-  
-    // Convert the result into an array and sort by Elo rating in descending order
-    const topAthletes = Object.values(mostRecentElo).sort((a, b) => b.elo_rating - a.elo_rating);
+// Function to get the most recent Elo ratings up to a specific date
+function getTopAthletesUpToDate(data, currentDate, topN, gender, discipline, inactiveCheck) {
+  // Convert currentDate to a Date object if it's not already
+  const current = new Date(currentDate);
 
-    return topAthletes.slice(0, topN);
+  // Calculate the date two years before the current date
+  const twoYearsAgo = new Date(current);
+  twoYearsAgo.setFullYear(current.getFullYear() - 2);
+
+  // Filter for the gender and discipline
+  let filteredData = data.filter(d => {
+    return d.date <= currentDate &&  
+           d.gender === gender &&  
+           d.discipline === discipline;
+  });
+
+  const mostRecentElo = {};
+  filteredData.forEach(d => {
+    // Track the most recent Elo rating for each athlete
+    if (!mostRecentElo[d.athlete_name] || new Date(d.date) > new Date(mostRecentElo[d.athlete_name].date)) {
+      mostRecentElo[d.athlete_name] = d;
+    }
+  });
+
+  // Convert the result into an array and apply the inactive logic
+  let topAthletes = Object.values(mostRecentElo).map(d => {
+    // Check if the athlete is inactive (i.e., their most recent Elo rating is older than 2 years)
+    const lastCompDate = new Date(d.date);
+    d.inactive = lastCompDate < twoYearsAgo ? 1 : 0;
+    return d;
+  });
+
+  // If the checkbox is unchecked, filter out inactive athletes
+  if (inactiveCheck === false) {
+    topAthletes = topAthletes.filter(d => d.inactive === 0);
   }
+  //console.log("Top athletes after filtering:", topAthletes);
+
+  // Sort by Elo rating in descending order
+  return topAthletes.sort((a, b) => b.elo_rating - a.elo_rating).slice(0, topN);
+}
+
 
   function getFlagEmoji(countryCode) {
     const codePoints = countryCode
@@ -76,9 +100,9 @@ d3.csv("elo_ratings_over_time.csv", function(d) {
   }
 
 
-  function updateChart(currentDate, topN, gender, discipline, delay) {
+  function updateChart(currentDate, topN, gender, discipline, delay, inactive) {
     
-    const topAthletes = getTopAthletesUpToDate(window.fullEloData, currentDate, topN, gender, discipline);
+    const topAthletes = getTopAthletesUpToDate(window.fullEloData, currentDate, topN, gender, discipline, inactive);
   
     const barHeight = 30; 
     const svgHeight = Math.max(60, barHeight * topN); 
@@ -148,7 +172,8 @@ d3.csv("elo_ratings_over_time.csv", function(d) {
             .attr("y", d => yScale(d.athlete_name))
             .attr("width", 0)  // Start width at 0 for smooth transitions
             .attr("height", yScale.bandwidth())  // Use yScale.bandwidth() for consistent height
-            .attr("fill", d => colorScale(d.athlete_name));
+            .attr("fill", d => d.inactive ? "#d3d3d3" : colorScale(d.athlete_name)); // Grey for inactive athletes
+            //.attr("fill", d => colorScale(d.athlete_name));
 
     barEnter.append("text")
             .attr("x", d => xScale(d.elo_rating) - 10)
@@ -156,7 +181,12 @@ d3.csv("elo_ratings_over_time.csv", function(d) {
             .attr("dy", ".35em")
             .attr("fill", "white")
             .attr("text-anchor", "end")
-            .text(d => `${d.athlete_name} ${getFlagEmoji(countryToEmoji[d.country])}`);
+            .text(d => {
+              // Append "(inactive)" to the name if the athlete is inactive
+              const status = d.inactive ? " (inactive)" : "";
+              return `${d.athlete_name}${status} ${getFlagEmoji(countryToEmoji[d.country])}`;
+          });
+//            .text(d => `${d.athlete_name} ${getFlagEmoji(countryToEmoji[d.country])}`);
 //            .text(d => d.athlete_name);
   
     const barUpdate = barEnter.merge(bars);
@@ -169,7 +199,8 @@ d3.csv("elo_ratings_over_time.csv", function(d) {
         .select("rect")
         .attr("width", d => xScale(d.elo_rating))  
         .attr("y", d => yScale(d.athlete_name))    
-        .attr("fill", d => colorScale(d.athlete_name))
+        //.attr("fill", d => colorScale(d.athlete_name))
+        .attr("fill", d => d.inactive ? "#d3d3d3" : colorScale(d.athlete_name)) // Grey for inactive athletes
         .attr("height", yScale.bandwidth());       
 
     
@@ -181,7 +212,11 @@ d3.csv("elo_ratings_over_time.csv", function(d) {
         .delay((d, i) => i * 20)
         .attr("x", d => xScale(d.elo_rating) - 10)
         .attr("y", d => yScale(d.athlete_name) + yScale.bandwidth() / 2)
-        .text(d => `${d.athlete_name} ${getFlagEmoji(countryToEmoji[d.country])}`);
+        .text(d => {
+          const status = d.inactive ? " (inactive)" : "";
+          return `${d.athlete_name}${status} ${getFlagEmoji(countryToEmoji[d.country])}`;
+      });
+        //.text(d => `${d.athlete_name} ${getFlagEmoji(countryToEmoji[d.country])}`);
         //.text(d => d.athlete_name);
   
     // Also handle the update for y-axis labels in case they change positions
