@@ -1,15 +1,20 @@
-d3.csv("elo_ratings_over_time.csv").then(function(data) {
+d3.csv("elo_ratings_over_time.csv", function(d) {
+  return {
+      date: new Date(d.date),  // Convert date string to Date object
+      athlete_name: d.athlete_name,  // Athlete's name
+      elo_rating: +d.elo_rating,  // Convert elo_rating to a number
+      discipline: d.discipline,  // Discipline (e.g., boulder, lead, speed)
+      gender: d.gender,  // Gender of the athlete
+      country: d.country
+  };
+}).then(function(data) {
 
-    data.forEach(d => {
-      d.date = new Date(d.date);  
-      d.elo_rating = +d.elo_rating;  
-    });
   
     window.fullEloData = data; 
     window.delay = 100;  // Default delay for transitions
   
     // Initialize chart with default settings
-    updateChart(new Date("2024-01-01"), 20, "male", "boulder", window.delay);  // Default date, gender, discipline, top N
+    updateChart(new Date("2024-05-31"), 20, "male", "boulder", window.delay);  // Default date, gender, discipline, top N
   
     // Add event listener to the "Update" button
     d3.select("#updateChart").on("click", function() {
@@ -18,6 +23,9 @@ d3.csv("elo_ratings_over_time.csv").then(function(data) {
       const gender = d3.select("#gender").node().value;
       const discipline = d3.select("#discipline").node().value;
   
+      updateCurrentDateDisplay(currentDate);
+      const timeSlider = d3.select("#timeSlider").node();
+      timeSlider.value = 0;
       updateChart(currentDate, topN * 2, gender, discipline, window.delay);
     });
   
@@ -31,7 +39,7 @@ d3.csv("elo_ratings_over_time.csv").then(function(data) {
       const gender = d3.select("#gender").node().value;
       const discipline = d3.select("#discipline").node().value;
   
-     
+      updateCurrentDateDisplay(date);
       updateChart(date, topN * 2, gender, discipline, delay);
     });
   });
@@ -131,7 +139,7 @@ d3.csv("elo_ratings_over_time.csv").then(function(data) {
     };
 
     const colorScale = d3.scaleOrdinal()
-        .domain(topAthletes.map(d => d.athlete_name))  // Use athlete names as the domain
+        .domain(window.fullEloData.map(d => d.athlete_name))  // Use athlete names as the domain
         .range(d3.schemeObservable10);
 
     
@@ -157,6 +165,7 @@ d3.csv("elo_ratings_over_time.csv").then(function(data) {
     barUpdate.transition()
         .duration(delay)
         .ease(d3.easeLinear)
+        .delay((d, i) => i * 20)
         .select("rect")
         .attr("width", d => xScale(d.elo_rating))  
         .attr("y", d => yScale(d.athlete_name))    
@@ -168,6 +177,7 @@ d3.csv("elo_ratings_over_time.csv").then(function(data) {
     barUpdate.select("text")
         .transition()
         .duration(delay)
+        .ease(d3.easeLinear)
         .delay((d, i) => i * 20)
         .attr("x", d => xScale(d.elo_rating) - 10)
         .attr("y", d => yScale(d.athlete_name) + yScale.bandwidth() / 2)
@@ -210,22 +220,34 @@ d3.csv("elo_ratings_over_time.csv").then(function(data) {
         timeSlider.dispatchEvent(new Event('input'));  
         } else {
         clearInterval(playInterval);  // Stop playing when the slider reaches the end
-        d3.select("#playButton").text("▶️ Play");  
+        d3.select("#playButton").text("▶️");  
         isPlaying = false;  
         }
     }, 400);  
     }
 
-  
+  // Function to display the current month and year based on slider value
+function updateCurrentDateDisplay(date) {
+  const dateDisplay = d3.select("#currentDateDisplay");
+
+  // Format the date to display as "Month YYYY"
+  const options = { year: 'numeric', month: 'long' };  // Display full month name and year
+  const formattedDate = date.toLocaleDateString('en-US', options);
+
+  // Update the text content with the formatted date
+  dateDisplay.text(formattedDate);
+}
+
+
   // Function to calculate the current date from the slider value
-  function getDateFromSlider(sliderValue) {
-    const startDate = new Date(d3.select("#startDate").node().value);
-    const endDate = new Date(d3.select("#endDate").node().value);
-  
-    const timeRange = endDate.getTime() - startDate.getTime();
-  
-    const currentDate = new Date(startDate.getTime() + (sliderValue / 100) * timeRange);
-  
-    return currentDate;
-  }
+function getDateFromSlider(sliderValue) {
+  const startDate = new Date(d3.select("#startDate").node().value);
+  const endDate = new Date(d3.select("#endDate").node().value);
+
+  const timeRange = endDate.getTime() - startDate.getTime();
+
+  const currentDate = new Date(startDate.getTime() + (sliderValue / 100) * timeRange);
+
+  return currentDate;
+}
   

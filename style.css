@@ -74,10 +74,7 @@ h1 {
 
 
 /* Styling for the bars */
-.bar {
-    fill: steelblue;
-    transition: width 0.8s, y 0.8s;
-}
+
 
 .bar text {
     fill: white;
@@ -91,17 +88,39 @@ h1 {
     cursor: pointer;
 }
 
+
+
 .play-bar-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
+    position: fixed;  /* Fix the container to a specific point on the page */
+    bottom: 20px;     /* Positioned at the bottom */
+    right: 350px;       /* Adjust as needed for horizontal positioning */
+    width: 800px;     /* Total width of the play bar container */
+    display: flex;    /* Flexbox for easy alignment */
     align-items: center;
-    position: relative; /* Ensure it doesn't interfere with SVG */
+    gap: 10px;        /* Space between the play button, slider, and date */
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* Optional visual styling */
+    z-index: 1000;    /* Ensure it stays on top of other elements */
 }
 
-.play-bar-container input[type="range"] {
-    width: 100%;
+/* Adjust slider to leave space for the date */
+.slider-wrapper {
+    position: relative;
+    width: 70%;   /* Ensure the slider takes up 70% of the container width */
 }
+
+#timeSlider {
+    width: 100%;  /* The slider should fill the space inside its wrapper */
+}
+
+/* Date display with fixed width */
+#currentDateDisplay {
+    width: 200px;    /* Fixed width to ensure consistent space for the date */
+    text-align: left;
+}
+
+
 
 
 text {
