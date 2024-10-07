@@ -100,7 +100,7 @@ h1 {
 }
 
 .play-bar-container input[type="range"] {
-    width: 80%;
+    width: 100%;
 }
 
 

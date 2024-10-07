@@ -9,32 +9,29 @@
 </head>
 <body>
     <div class="container">
-        <h1>Climber Elo Ratings Bar Chart Race</h1>
+        <h1>Climber Elo-MMR Ratings Bar Chart Race</h1>
 
         <!-- Filters: Start Date, End Date, Top N Athletes, Gender, Discipline -->
         <div class="controls">
             <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" value="2024-01-01">
+            <input type="date" id="startDate" value="2014-01-01" min="1990-01-01">
             
             <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" value="2024-05-31">
+            <input type="date" id="endDate" value="2024-05-31" min="1990-01-01">
 
             <label for="topN">Top N Athletes:</label>
             <input type="number" id="topN" value="10" min="1" max="100">
 
             <label for="gender">Gender:</label>
             <select id="gender">
-                <option value="all">All</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
 
             <label for="discipline">Discipline:</label>
             <select id="discipline">
-                <option value="all">All</option>
-                <option value="boulder">Boulder</option>
-                <option value="lead">Lead</option>
-                <option value="speed">Speed</option>
+                <option value="boulder">Lead</option>
+                <option value="lead">Boulder</option>
             </select>
 
             <button id="updateChart">Update</button>
@@ -48,6 +45,8 @@
         <!-- Play bar for scrolling through time -->
         <!-- Play bar (slider) -->
         <div class="play-bar">
+            <button id="playButton">▶️</button> <!-- Play button -->
+
             <input type="range" id="timeSlider" min="0" max="100" value="0" step="1">
         </div>
     </div>
