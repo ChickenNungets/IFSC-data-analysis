@@ -3,7 +3,7 @@
 Competition Climbing is a new and exciting sport. Competitions vary wildly between one and another, with routesetters constantly introducing novel types of movement, recently emphasizing impressive parkour style coordination movement. With the additional component of high risk/randomness in the sport due to the nature of the format (e.g. only 4 minutes to attempt a boulder and only one attempt on a lead route), I wonder what kind of insights can be drawn from competition data with such a high level of variance.
 # Data Collection
 
-The data for this project was collected by scraping the International Federation of Sport Climbing (IFSC) API, which provides detailed information about athletes, competition events, and results. The scraping process is automated using Python, leveraging multithreading to efficiently handle multiple API requests. 
+The data for this project was collected by scraping the International Federation of Sport Climbing (IFSC) API, which provides detailed information about athletes, competition events, and results. The scraping process is automated using Python, leveraging multithreading to efficiently handle multiple API requests. I store data relating to athletes (gender, age, country, height, etc) in athlete_information.csv. Data related to athlete ranks in competition is stored in athlete_results.csv
 
 We can view the API calls used to retrive athlete and competition data by examining the Network tab in Chrome DevTools. You can view this in more detail in the gather.ipynb file. For failed requests, the script will automatically retry the API call multiple times before moving on to a higher success rate.
 
@@ -20,7 +20,7 @@ Once the raw data was collected, it went through a cleaning process. I utilized 
 
 # Data Analysis and Visualization
 
-The goal of this project was to create an interactive bar chart race showing the top competition climbers and how their [Elo-MMR](https://github.com/EbTech/Elo-MMR/blob/master/paper/EloMMR.pdf) ratings evolved over time. See elo.ipynb for more details on Elo-MMR implementation. I used D3.js to create a dynamic visualization.
+The goal of this project was to create an interactive bar chart race showing the top competition climbers and how their [Elo-MMR](https://github.com/EbTech/Elo-MMR/blob/master/paper/EloMMR.pdf) ratings evolved over time. See elo.ipynb for more details on Elo-MMR implementation. elo.ipynb loads the scraped data, cleans it, calculates elo and writes these calculations as output to a csv in the d3-viz folder. I used D3.js to create a dynamic visualization.
 
 Key features:
 
@@ -35,6 +35,7 @@ The project is hosted using GitHub Pages for easy sharing and accessibility. You
 
 This project was a fun dive into data visualization and applied data science. In the future, I would like to:
 
+- Handle retired athletes
 - Expand the data to include speed (which in its bracket tournament format lends itself to regular elo rankings) and combined boulder and lead Elo-MMR.
 - Somehow integrate the variance of an athletes current ELO into the visualization, which is data I am not currently using.
 - Integrate machine learning models to predict future Elo ratings based on past performance.
