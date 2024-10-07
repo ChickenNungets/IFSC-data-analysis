@@ -36,6 +36,7 @@ The project is hosted using GitHub Pages for easy sharing and accessibility. You
 This project was a fun dive into data visualization and applied data science. In the future, I would like to:
 
 - Expand the data to include speed (which in its bracket tournament format lends itself to regular elo rankings) and combined boulder and lead Elo-MMR.
+- Somehow integrate the variance of an athletes current ELO into the visualization, which is data I am not currently using.
 - Integrate machine learning models to predict future Elo ratings based on past performance.
 - Implement a full dashboard with more in-depth visualizations (e.g., scatter plots, line charts) for trend analysis.
 
