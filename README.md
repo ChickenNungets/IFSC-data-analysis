@@ -20,7 +20,7 @@ Once the raw data was collected, it went through a cleaning process. I utilized 
 
 # Data Analysis and Visualization
 
-The goal of this project was to create an interactive bar chart race showing the top competition climbers and how their [Elo-MMR](https://github.com/EbTech/Elo-MMR/blob/master/paper/EloMMR.pdf) ratings evolved over time. See elo.ipynb for more details on Elo-MMR implementation. elo.ipynb loads the scraped data, cleans it, calculates elo and writes these calculations as output to a csv in the d3-viz folder. I used D3.js to create a dynamic visualization.
+The goal of this project was to create an interactive bar chart race showing the top competition climbers and how their [Elo-MMR](https://github.com/EbTech/Elo-MMR/blob/master/paper/EloMMR.pdf) (a rating/skill estimation system for multiplayer games) ratings evolved over time. See elo.ipynb for more details on Elo-MMR implementation. elo.ipynb loads the scraped data, cleans it, calculates elo and writes these calculations as output to a csv in the d3-viz folder. I used D3.js to create a dynamic visualization.
 
 Key features:
 
